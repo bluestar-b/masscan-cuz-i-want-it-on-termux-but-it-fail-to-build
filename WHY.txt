@@ -1,0 +1,67 @@
+fatal: No names found, cannot describe anything.
+cc -g -ggdb    -Wall -O2 -c src/crypto-base64.c -o tmp/crypto-base64.o
+cc -g -ggdb    -Wall -O2 -c src/crypto-blackrock.c -o tmp/crypto-blackrock.o
+cc -g -ggdb    -Wall -O2 -c src/crypto-blackrock2.c -o tmp/crypto-blackrock2.o
+cc -g -ggdb    -Wall -O2 -c src/crypto-lcg.c -o tmp/crypto-lcg.o
+cc -g -ggdb    -Wall -O2 -c src/crypto-primegen.c -o tmp/crypto-primegen.o
+cc -g -ggdb    -Wall -O2 -c src/crypto-siphash24.c -o tmp/crypto-siphash24.o
+cc -g -ggdb    -Wall -O2 -c src/event-timeout.c -o tmp/event-timeout.o
+cc -g -ggdb    -Wall -O2 -c src/in-binary.c -o tmp/in-binary.o
+cc -g -ggdb    -Wall -O2 -c src/in-filter.c -o tmp/in-filter.o
+cc -g -ggdb    -Wall -O2 -c src/in-report.c -o tmp/in-report.o
+cc -g -ggdb    -Wall -O2 -c src/main-conf.c -o tmp/main-conf.o -DGIT=\""unknown"\"
+cc -g -ggdb    -Wall -O2 -c src/main-dedup.c -o tmp/main-dedup.o
+cc -g -ggdb    -Wall -O2 -c src/main-initadapter.c -o tmp/main-initadapter.o
+cc -g -ggdb    -Wall -O2 -c src/main-listscan.c -o tmp/main-listscan.o
+cc -g -ggdb    -Wall -O2 -c src/main-ptrace.c -o tmp/main-ptrace.o
+cc -g -ggdb    -Wall -O2 -c src/main-readrange.c -o tmp/main-readrange.o
+cc -g -ggdb    -Wall -O2 -c src/main-status.c -o tmp/main-status.o
+cc -g -ggdb    -Wall -O2 -c src/main-throttle.c -o tmp/main-throttle.o
+cc -g -ggdb    -Wall -O2 -c src/main.c -o tmp/main.o
+cc -g -ggdb    -Wall -O2 -c src/masscan-app.c -o tmp/masscan-app.o
+cc -g -ggdb    -Wall -O2 -c src/massip-addr.c -o tmp/massip-addr.o
+src/massip-addr.c:292:19: warning: excess elements in union initializer [-Wexcess-initializers]
+  292 |       {NULL, {{0, 0}, 0}}
+      |                   ^
+src/massip-addr.c:296:13: warning: unused variable 'ip' [-Wunused-variable]
+  296 |   ipaddress ip;
+      |             ^~
+2 warnings generated.
+cc -g -ggdb    -Wall -O2 -c src/massip-parse.c -o tmp/massip-parse.o
+cc -g -ggdb    -Wall -O2 -c src/massip-rangesv4.c -o tmp/massip-rangesv4.o
+cc -g -ggdb    -Wall -O2 -c src/massip-rangesv6.c -o tmp/massip-rangesv6.o
+cc -g -ggdb    -Wall -O2 -c src/massip.c -o tmp/massip.o
+cc -g -ggdb    -Wall -O2 -c src/misc-rstfilter.c -o tmp/misc-rstfilter.o
+cc -g -ggdb    -Wall -O2 -c src/out-binary.c -o tmp/out-binary.o
+cc -g -ggdb    -Wall -O2 -c src/out-certs.c -o tmp/out-certs.o
+cc -g -ggdb    -Wall -O2 -c src/out-grepable.c -o tmp/out-grepable.o
+cc -g -ggdb    -Wall -O2 -c src/out-hostonly.c -o tmp/out-hostonly.o
+cc -g -ggdb    -Wall -O2 -c src/out-json.c -o tmp/out-json.o
+cc -g -ggdb    -Wall -O2 -c src/out-ndjson.c -o tmp/out-ndjson.o
+cc -g -ggdb    -Wall -O2 -c src/out-null.c -o tmp/out-null.o
+cc -g -ggdb    -Wall -O2 -c src/out-redis.c -o tmp/out-redis.o
+cc -g -ggdb    -Wall -O2 -c src/out-tcp-services.c -o tmp/out-tcp-services.o
+cc -g -ggdb    -Wall -O2 -c src/out-text.c -o tmp/out-text.o
+cc -g -ggdb    -Wall -O2 -c src/out-unicornscan.c -o tmp/out-unicornscan.o
+cc -g -ggdb    -Wall -O2 -c src/out-xml.c -o tmp/out-xml.o
+cc -g -ggdb    -Wall -O2 -c src/output.c -o tmp/output.o
+cc -g -ggdb    -Wall -O2 -c src/pixie-backtrace.c -o tmp/pixie-backtrace.o
+cc -g -ggdb    -Wall -O2 -c src/pixie-file.c -o tmp/pixie-file.o
+cc -g -ggdb    -Wall -O2 -c src/pixie-threads.c -o tmp/pixie-threads.o
+src/pixie-threads.c:51:5: error: call to undeclared function 'pthread_setschedprio'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   51 |     pthread_setschedprio(thread, max_prio_for_policy);
+      |     ^
+src/pixie-threads.c:51:5: note: did you mean 'pthread_setschedparam'?
+/data/data/com.termux/files/usr/include/pthread.h:354:5: note: 'pthread_setschedparam' declared here
+  354 | int pthread_setschedparam(pthread_t __pthread, int __policy, const struct sched_param* _Nonnull __param);
+      |     ^
+1 error generated.
+make: *** [Makefile:116: tmp/pixie-threads.o] Error 1
+
+
+
+
+
+So i did lil fix:
+
+
