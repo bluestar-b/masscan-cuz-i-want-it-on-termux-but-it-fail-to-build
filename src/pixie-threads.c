@@ -1,57 +1,41 @@
 #define _GNU_SOURCE
+#define _POSIX_C_SOURCE 200809L
 #include "pixie-threads.h"
 
 #if defined(WIN32)
-#include <Windows.h>
-#include <process.h>
+  #include <Windows.h>
+  #include <process.h>
+#elif defined(__GNUC__) && !defined(WIN32)
+  #include <unistd.h>
+  #include <pthread.h>
+  #include <sched.h>
+  #include <errno.h>
 #endif
 
-#if defined(__GNUC__) && !defined(WIN32)
-#include <unistd.h>
-#include <pthread.h>
-#include <sched.h>
-#include <errno.h>
-#endif
-
-#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#endif
-
-#ifndef UNUSEDPARM
-#ifdef _MSC_VER
-#define UNUSEDPARM(x) x
-#else
-#define UNUSEDPARM(x)
-#endif
-#endif
-
-/****************************************************************************
- ****************************************************************************/
-void
-pixie_cpu_raise_priority(void)
-{
-#if defined WIN32
-DWORD_PTR result;
-    result = SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+void pixie_cpu_raise_priority(void) {
+#if defined(WIN32)
+    DWORD_PTR result = SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
     if (result == 0) {
-        fprintf(stderr, "set_priority: returned error win32:%u\n", (unsigned)GetLastError());
+        fprintf(stderr, "set_priority: error win32:%u\n", (unsigned)GetLastError());
     }
-#elif defined(__linux__) && defined(__GNUC__)
+#elif defined(__linux__) && defined(__GNUC__) && defined(_POSIX_PRIORITY_SCHEDULING)
     pthread_t thread = pthread_self();
     pthread_attr_t thAttr;
     int policy = 0;
     int max_prio_for_policy = 0;
+    struct sched_param param;
 
     pthread_attr_init(&thAttr);
     pthread_attr_getschedpolicy(&thAttr, &policy);
     max_prio_for_policy = sched_get_priority_max(policy);
 
+    param.sched_priority = max_prio_for_policy;
+    int ret = pthread_setschedparam(thread, policy, &param);
+    if (ret != 0) {
+        fprintf(stderr, "Failed to set sched param: %s\n", strerror(ret));
+    }
 
-    pthread_setschedprio(thread, max_prio_for_policy);
     pthread_attr_destroy(&thAttr);
-    return;
-
 #endif
 }
 
